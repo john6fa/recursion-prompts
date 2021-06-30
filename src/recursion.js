@@ -178,10 +178,29 @@ var powerOfTwo = function (n) {
 
 // 9. Write a function that reverses a string.
 var reverse = function (string) {
+  if (string === null || string.length === 0) {
+    return "";
+  }
+
+  return reverse(string.substring(1)) + string.charAt(0);
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function (string) {
+  if (string.length === 0) {
+    return true;
+  }
+
+  if (string.length === 1) {
+    return true;
+  }
+
+  if (string.charAt(0).toLowerCase() !== string.charAt(string.length - 1).toLowerCase()) {
+    return false;
+  }
+
+  var str = string.substring(1, string.length - 1);
+  return palindrome(str);
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -263,11 +282,32 @@ var countKeysInObj = function (obj, key) {
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function (obj, value) {
+
+  var count = 0;
+  for (var key in obj) {
+    if (obj[key] === value) {
+      count++;
+    } else if (typeof (obj[key]) === "object") {
+      count += countValuesInObj(obj[key], value);
+
+    }
+  }
+  return count;
 };
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function (obj, oldKey, newKey) {
+
+  for (var key in obj) {
+    if (key === oldKey) {
+      obj[newKey] = obj[key];
+      delete obj[oldKey];
+    } else if (typeof (obj[key]) === "object") {
+      replaceKeysInObj(obj[key], oldKey, newKey);
+    }
+  }
+  return obj;
 };
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
